@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: firstdeployment
+    labels:
+      name: firstdeployment
+spec:
+  replicas: 10
+  minReadySeconds: 30
+  strategy:
+     rollingUpdate:
+        maxSurge: 0
+        maxUnavailable: 1
+     type: RollingUpdate
+  selector:
+      matchLabels:
+         type: myapp
+  template:
+     metadata:
+        name: dpod
+        labels:
+           type: myapp
+     spec:
+       containers:
+          - name: con1
+            image: coolgourav147/nginx-custom:v2
+  

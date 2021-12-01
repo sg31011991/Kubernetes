@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: thirdpod
+  labels:
+    env: DEV
+    type: app
+spec:
+  containers:
+        - name: con2
+          image: nginx

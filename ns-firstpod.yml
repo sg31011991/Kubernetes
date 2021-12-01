@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ns-pod
+  namespace: demo-ns
+  labels:
+    env: DEV
+spec:
+  containers:
+        - name: con1
+          image: coolgourav147/nginx-custom 
