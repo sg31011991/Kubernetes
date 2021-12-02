@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: rlpod-ns
+  labels:
+    app: myapp
+spec:
+  containers:
+        - name: con1
+          image: coolgourav147/nginx-custom 
+          resources:
+             requests:
+               memory: 100Mi
+               cpu: 0.1
+             limits:
+               cpu: 0.2
+               memory: 200Mi
