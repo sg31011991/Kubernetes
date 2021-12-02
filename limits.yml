@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: LimitRange
+metadata:
+    name: testlimit
+spec:
+  limits:
+    - default:
+        cpu: 200m
+        memory: 500m
+      type: Container
