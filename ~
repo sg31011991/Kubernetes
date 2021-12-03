@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod2
+  labels:
+    env: DEV
+spec:
+  containers:
+        - name: con1
+          image: coolgourav147/nginx-custom
+          imagePullPolicy: Never
+  tolerations: 
+      -  effect: "NoSchedule"
+         key: "mysize"
+         operator: "Equal"
+         value: "large"
+
