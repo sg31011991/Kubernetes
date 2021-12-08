@@ -1,0 +1,5 @@
+
+
+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
+
+git remote set-url origin https://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@github.com/sg31011991/Kubernetes.git
