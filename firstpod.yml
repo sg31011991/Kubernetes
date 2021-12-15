@@ -7,4 +7,4 @@ metadata:
 spec:
   containers:
         - name: con1
-          image: coolgourav147/nginx-custom 
+          image: nginx 
