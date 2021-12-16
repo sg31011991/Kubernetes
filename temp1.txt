@@ -1,0 +1,4 @@
+NAME            CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%   
+k8s-master-vm   260m         13%    1804Mi          46%       
+k8s-node1-vm    111m         5%     1172Mi          30%       
+k8s-node2-vm    175m         8%     1374Mi          35%       
