@@ -3,13 +3,13 @@
 NODE=$(kubectl top nodes)
 echo "$NODE"
 
-kubectl top nodes | grep -v  NAME > tmp.txt
+kubectl get nodes | grep -v NAME | grep -v control-plane,master | awk '{ print $1}' > tmp.txt
 NODES=`cat tmp.txt | awk '{print $1}'`
 for i in $NODES
 do
 CPU_USAGE=`cat tmp.txt | grep $i | awk '{print $3}' | tr -d "\%"`
 MEM_USAGE=`cat tmp.txt | grep $i | awk '{print $5}' | tr -d "\%"`
-if [[ $CPU_USAGE -gt 60  ||  $MEM_USAGE -lt 30 ]]
+if [[ $CPU_USAGE -gt 60  ||  $MEM_USAGE -gt 30 ]]
 then
 #echo  "$i high"
 kubectl label nodes "$i" on-master-
@@ -56,3 +56,5 @@ EOF
 fi
 done
 rm tmp.txt
+echo "$NODES"
+echo "$i"
