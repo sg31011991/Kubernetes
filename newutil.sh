@@ -14,7 +14,7 @@ NODES=`cat tmp.txt | awk '{print $1}'`
 #do
 CPU_USAGE=`cat tmp.txt | awk '{print $3}' | tr -d "\%"`
 MEM_USAGE=`cat tmp.txt | awk '{print $5}' | tr -d "\%"`
-if [[ $CPU_USAGE -gt 60  ||  $MEM_USAGE -lt 60 ]]
+if [[ $CPU_USAGE -gt 60  ||  $MEM_USAGE -lt 37 ]]
 then
 echo  "$i"
 kubectl label nodes "$i" on-master-
@@ -26,7 +26,7 @@ for z in $x
 do
 CPU_USAGE=`cat tmpx.txt | grep $i | awk '{print $3}' | tr -d "\%"`
 MEM_USAGE=`cat tmpx.txt | grep $i | awk '{print $5}' | tr -d "\%"`
-if [[ $CPU_USAGE -gt 60  ||  $MEM_USAGE -gt 30 ]]
+if [[ $CPU_USAGE -gt 60  ||  $MEM_USAGE -gt 37 ]]
 then
 kubectl label nodes "$z" on-master="true"
 fi
