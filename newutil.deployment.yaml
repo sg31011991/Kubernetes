@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: streamer-v5-deployment
+  labels:
+     app: streamer-v5
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+       app: streamer-v5
+  template:
+    metadata:
+       labels:
+         app: streamer-v5
+    spec:
+      containers:
+      - name: streamer-v5
+        image: nginx
+        ports:
+          - containerPort: 8880
+      nodeSelector:
+         on-master: "yes"

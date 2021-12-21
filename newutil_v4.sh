@@ -26,7 +26,7 @@ for z in $x
 do
 CPU_USAGE=`cat tmpx.txt | grep $i | awk '{print $3}' | tr -d "\%"`
 MEM_USAGE=`cat tmpx.txt | grep $i | awk '{print $5}' | tr -d "\%"`
-if [[ $CPU_USAGE -gt 60  ||  $MEM_USAGE -gt 33 ]]
+if [[ $CPU_USAGE -gt 60  ||  $MEM_USAGE -gt 37 ]]
 then
 kubectl label nodes "$z" on-master="true"
 fi
@@ -41,11 +41,35 @@ kubectl rollout restart deployment "$DEPLOYMENT"
 PODS=$(kubectl get pods -o wide)
 echo "$PODS"
 kubectl label nodes "$i" on-master="yes"
-######Deployment Details#############
-kubectl apply -f newutil.deployment.yaml
+cat <<EOF | kubectl apply -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: streamer-v5-deployment
+  labels:
+     app: streamer-v5
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+       app: streamer-v5
+  template:
+    metadata:
+       labels:
+         app: streamer-v5
+    spec:
+      containers:
+      - name: streamer-v5
+        image: nginx
+        ports:
+          - containerPort: 8880
+      nodeSelector:
+         on-master: "yes"
+
+EOF
+
 
 else
-
 #echo "$i"
 kubectl label nodes "$i" on-master=true
 cat <<EOF | kubectl apply -f -
