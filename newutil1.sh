@@ -2,17 +2,37 @@
 
 NODE=$(kubectl top nodes)
 echo "$NODE"
-
-kubectl top nodes | grep -v  NAME > tmp.txt
-NODES=`cat tmp.txt | awk '{print $1}'`
-for i in $NODES
+##Getting Node information######################
+kubectl get nodes | grep -v NAME | grep -v control-plane,master | awk '{ print $1}' > tmp1.txt
+NODES1=`cat tmp1.txt | awk '{print $1}'`
+for i in $NODES1
 do
-CPU_USAGE=`cat tmp.txt | grep $i | awk '{print $3}' | tr -d "\%"`
-MEM_USAGE=`cat tmp.txt | grep $i | awk '{print $5}' | tr -d "\%"`
-if [[ $CPU_USAGE -gt 60  ||  $MEM_USAGE -lt 30 ]]
+#Node utlization details
+kubectl top nodes $i | grep -v  NAME | awk '{ print $1}' > tmp.txt
+NODES=`cat tmp.txt | awk '{print $1}'`
+#for i in $NODES
+#do
+CPU_USAGE=`cat tmp.txt | awk '{print $3}' | tr -d "\%"`
+MEM_USAGE=`cat tmp.txt | awk '{print $5}' | tr -d "\%"`
+if [[ $CPU_USAGE -gt 60  ||  $MEM_USAGE -gt 35 ]]
 then
-#echo  "$i high"
+echo  "$i"
 kubectl label nodes "$i" on-master-
+#kubectl label nodes "$i" on-master="true"
+
+kubectl top nodes $i | grep -v  NAME > tmpx.txt
+x=`cat tmpx.txt | awk '{print $1}'`
+for z in $x
+do
+CPU_USAGE=`cat tmpx.txt | grep $i | awk '{print $3}' | tr -d "\%"`
+MEM_USAGE=`cat tmpx.txt | grep $i | awk '{print $5}' | tr -d "\%"`
+if [[ $CPU_USAGE -gt 60  ||  $MEM_USAGE -gt 30 ]]
+then
+kubectl label nodes "$z" on-master="true"
+fi
+done
+rm -rf tmpx.txt
+#Deployments
 kubectl get deployment | grep -v  NAME > dep.txt
 DEPLOYMENT=`cat dep.txt | awk '{print $1}'`
 echo "$DEPLOYMENT"
@@ -20,8 +40,12 @@ rm -rf dep.txt
 kubectl rollout restart deployment "$DEPLOYMENT"
 PODS=$(kubectl get pods -o wide)
 echo "$PODS"
+kubectl label nodes "$i" on-master="yes"
+######Deployment Details#############
+kubectl apply -f newutil.deployment.yaml
 
 else
+
 #echo "$i"
 kubectl label nodes "$i" on-master=true
 cat <<EOF | kubectl apply -f -
@@ -52,7 +76,6 @@ spec:
 
 EOF
 
-
 fi
 done
-rm tmp.txt
+rm tmp.txt tmp1.txt

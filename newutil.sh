@@ -26,7 +26,7 @@ for z in $x
 do
 CPU_USAGE=`cat tmpx.txt | grep $i | awk '{print $3}' | tr -d "\%"`
 MEM_USAGE=`cat tmpx.txt | grep $i | awk '{print $5}' | tr -d "\%"`
-if [[ $CPU_USAGE -gt 60  ||  $MEM_USAGE -gt 33 ]]
+if [[ $CPU_USAGE -gt 60  ||  $MEM_USAGE -gt 32 ]]
 then
 kubectl label nodes "$z" on-master="true"
 fi
