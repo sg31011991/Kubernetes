@@ -7,3 +7,7 @@ echo  "$i"
 kubectl label nodes "$i" on-master-
 done
 
+KUBECTL="kubectl"
+
+NODE=$($KUBECTL get nodes --show-labels)
+echo "$NODE"

@@ -1,0 +1,2 @@
+k8s-node1-vm
+k8s-node2-vm
